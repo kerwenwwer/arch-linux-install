@@ -7,7 +7,7 @@
 文章貢獻感謝原作者Cheng-Yi Hong以及Arch Linux Taiwan 社群人員對本文之貢獻以及轉發
 
 
-# 預安裝
+## 預安裝
 
 一但你準備好了開機隨身碟，也在bios中使用UEFI模式，並且選擇以usb開機後，一般來說你可以毫無意外得進入ArchISO的shell畫面中，那麼如同大部分發行板的live安裝模式，我們擁有一個完整的bash shell ，以及kernel環境。
 那麼它看起來就像各位熟悉的Linux純文字界面，那麼我們可以直接在裡頭進行安裝工作。
@@ -83,10 +83,9 @@ mount /dev/sda3 /mnt;
 mkdir /mnt/boot;
 mount /dev/sda1 /mnt/boot;
 ```
-# 安裝
-一般來說我們都是使甕mirrorlist來取得我們的kernel包，那麼你也可以選擇使用Install Scripts來安裝
-https://github.com/danny8376/arch_install_script
-
+## 安裝
+一般來說我們都是使用mirrorlist來取得我們的kernel包，那麼你也可以選擇使用Install Scripts來安裝若是要使用scripts來安裝的話請參考此網址：https://github.com/danny8376/arch_install_script
+若是想要使用mirrirlist的話便可以繼續閱讀本文
 ### 設定 pacman 的 mirrorlist
 重新排序 pacman 的鏡像站順序，可以提高下載安裝的速度。
 ```shell
@@ -177,7 +176,10 @@ pacman -S wireless_tools;
 pacman -S dhclient;
 pacman -S wpa_supplicant;
 ```
-
+### 啟動必要開機模塊
+```shell
+systemctl enable dhcpd.service
+```
 ### 重新啟動進入新系統
 ```shell
 exit
@@ -199,7 +201,7 @@ vim /etc/resolv.conf
 - nameserver 8.8.8.8 #Google
 - nameserver 8.8.4.4 #Google
 
-## Step 17 安裝 Gnome 桌面環境
+### 安裝 Gnome 桌面環境
 
 替新系統設定 pacman 的 mirrorlist
 ```shell
@@ -237,7 +239,7 @@ vim /etc/sudoers
 
 建立新使用者，並加入 sudo 群組
 ```shell
-useradd -m -u 1001 <your-user-name>
+useradd -m -u   <your-user-name>
 passwd <your-user-name>
 usermod <your-user-name> -G wheel
 ```
@@ -247,8 +249,15 @@ usermod <your-user-name> -G wheel
 reboot
 ```
 
-### 安裝 yaourt
-yaourt 為 pacman 的前導程式，有對 AUR 的完善支持，可以安裝更多套件
+### 安裝 aur helper
+Arch 使用者軟體倉庫 (AUR) 是由社群推動的使用者軟體庫。它包含了軟體包描述單 (PKGBUILD)，可以用 makepkg 從原始碼編譯軟體包，並透過 Pacman 安裝。 透過 AUR 可以在社群間分享、組織新進軟體包，熱門的軟體包有機會被收錄進 community軟體庫。這份文件將解釋如何存取、使用 AUR。(本段來自Arch Wiki) 
+那麼，如果我們想要使用aur上的資源，我們需要確認我們已經被妥一個擁有 [makepkg](https://wiki.archlinux.org/index.php/Makepkg)指令的環境。然後我們還需要使用aur helper來幫我們編譯aur上的內容。
+以下推薦幾個aur helper 
+其他請參閱[arch aur](https://wiki.archlinux.org/index.php/Arch_User_Repository_(%E6%AD%A3%E9%AB%94%E4%B8%AD%E6%96%87)) 以及[aur helper](https://wiki.archlinux.org/index.php/AUR_helpers)頁面。
+### aurman 
+這是目前
+
+#### yaourt 
 ```shell
 sudo vim /etc/pacman.conf
 ```
