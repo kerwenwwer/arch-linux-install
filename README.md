@@ -223,7 +223,7 @@ vim /etc/sudoers
 建立新使用者，並加入 sudo 群組
 
 ```shell
-useradd -m -u   <your-user-name>
+useradd -m -u  <your-user-name>
 passwd <your-user-name>
 usermod <your-user-name> -G wheel
 ```
