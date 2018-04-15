@@ -1,5 +1,7 @@
 # Arch Linux 安裝教學
 
+![docs](https://img.shields.io/readthedocs/pip.svg)
+
 ## 說明
 
 [參考自 Arch Wiki](https://wiki.archlinux.org/index.php/installation_guide)
