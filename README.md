@@ -5,19 +5,24 @@
 [參考自 Arch Wiki](https://wiki.archlinux.org/index.php/installation_guide)
 文章貢獻感謝原作者 Cheng-Yi Hong 以及 Arch Linux Taiwan 社群人員對本文之貢獻以及轉發
 
-## 預安裝
+## 安裝
 
-一但你準備好了開機隨身碟，也在 bios 中使用 UEFI 模式，並且選擇以 usb 開機後，一般來說你可以毫無意外得進入 ArchISO 的 shell 畫面中，那麼如同大部分發行板的 live 安裝模式，我們擁有一個完整的 bash shell ，以及 kernel 環境。那麼它看起來就像各位熟悉的 Linux 純文字界面，那麼我們可以直接在裡頭進行安裝工作。
+一但你準備好了開機隨身碟，也在 UEFI settings 中使用 UEFI 模式(如果支援建議使用)，並且選擇以 usb 開機後，一般來說你可以毫無意外得進入 Arch ISO 的 shell 畫面中，也就是一個用來安裝 Arch 的 live 系統，會進入到一個有 zsh 的 tty ，我們可以直接在裡頭進行安裝工作。
+如果沒有辦法進入，可能需要停用 secure boot。
+
+以下安裝過程皆假設使用 UEFI
 
 ### 驗證起動模式
 
-如果你已經啟用 UEFI 模式，那麼 Arch ISO 就會透過 UEFI 啟動你的系統，當然我們如果要驗證這一點，便可以列出 efivars 目錄
+如果你已經啟用 UEFI 模式，Arch ISO 就會被經由 UEFI 啟動，在 UEFI 模式下，會存在目錄 /sys/firmware/efi/efivars ，我們如果想確保目前是以 UEFI 進入系統，便可以列出 efivars 目錄
 
 ```shell
 ls /sys/firmware/efi/efivars
 ```
 
 ### 設定網路連線
+
+如果能 ping 到 google.com 在絕大多數情況下就成功了
 
 ```shell
 ping www.google.com
@@ -26,8 +31,8 @@ ping www.google.com
 有線連線方法: ifconfig + dhclient
 
 ```shell
-ifconfig <interface> up;
-dhclient <interface>;
+ifconfig <interface> up
+dhclient <interface>
 ```
 
 無線連線方法: ifconfig + wpa_supplicant
@@ -37,6 +42,14 @@ ifconfig <interface> up
 wpa_passphrase <ESSID> <password> >> /etc/wpa_supplicant/wpa_supplicant.conf
 wpa_supplicant -B -i <interface> -c /etc/wpa_supplicant/wpa_supplicant.conf
 dhclient <interface>
+```
+
+另一個好用的 wifi 連線方式是 ```wifi-menu``` 指令
+
+如果 dhcpcd 有在背景執行，就不用執行 dhclient ，啟用方式如下
+
+```
+systemctl start dhcpcd.service
 ```
 
 ### 分割磁區
@@ -53,16 +66,24 @@ lsblk -a
 fdisk -l
 ```
 
-那麼值得一提的是所有在以上兩個指令下顯示掛載的除存裝置都會被系統認定為/dev 底下的其他設備，因此所有除存裝置的位置開頭都為/dev，舉例來說透過運行 lsblk 後，我得知我得固態硬碟名稱為 nvme0n1 那麼他在系統中掛載的位置便是/dev/nvme0n1
-那麼在了解以上規則後我們就可以來分割磁區，這裡以最常見的機械硬碟磁區名稱/dev/sdax 來做講解
+在 linux 中 device nodes 位於 /dev 底下，其中 block devices (儲存裝置們)位於 /dev 或 /dev/block ，在 Arch 為前者，舉例來說透過運行 lsblk 後，我得知我得固態硬碟名稱為 nvme0n1 ，他的 device node 位置便是 /dev/nvme0n1
+
+其中常見 block devices 的命名規則如下
+
+SATA 或 USB: sd<x><y> ，其中 x 為英文字母，表示第 x 顆硬碟， y 為數字，表示硬碟上的第 y 個分區
+IDE 介面: hd<x><y> ，其中 x 為英文字母，表示第 x 顆硬碟， y 為數字，表示硬碟上的第 y 個分區
+NVMe 介面: nvme<x>n<y>p<z> ，其中 x, y, z 為數字， <x>n<y> 表示硬碟， p<z> 表示分區
+MMC: mmcblk<x>p<y> ，其中 x, y 為數字， <x> 表示碟， p<y> 表示分區
+
+在了解以上規則後我們就可以來分割磁區，這裡以最常見的第一顆 SATA 介面硬碟分區名稱 /dev/sda<y> 來做講解，並假設硬碟是空的
 
 ```shell
 cfdisk /dev/sda
 ```
 
 * /dev/sda1: /boot
-  **空間至少 512MB，類型為 EFI System**
-  <br />
+  **空間至少 512MB，類型為 EFI System** (若有其他系統的EFI分區可以直接沿用，且不須格式化)
+  <br />
 
 * /dev/sda2: Swap
   **自訂，作者使用 8G，類型為 Linux Swap**
@@ -72,28 +93,28 @@ cfdisk /dev/sda
   **自訂，作者使用全部剩餘空間，類型為 Linux filesystem**
   <br />
 
-基本上來說，我們都會在系統上加上 Swap（至換）分區。當然這個不是必須的，如果你覺得你的 RAM 大小足夠。那麼你可能覺得不需要這個分區也是可以的。順帶依提，當系統建立完成後想要新增 Swap 分區也是可行的。
+通常我們都會在系統上加上 Swap（至換）分區。當然這個不是必須的，如果你覺得你的 RAM 大小足夠，可能覺得不需要這個分區也是可以的。順帶一提，當系統建立完成後想要新增 Swap 分區，或是基於檔案的 swap 也都是可行的。
 
 ### 格式化磁區
 
 ```shell
-mkfs -t vfat /dev/sda1;
-mkswap /dev/sda2;
-mkfs -t ext4 /dev/sda3;
+mkfs -t vfat /dev/sda1
+mkswap /dev/sda2
+mkfs -t ext4 /dev/sda3
 ```
 
 ### 掛載磁區
 
 ```shell
-mount /dev/sda3 /mnt;
-mkdir /mnt/boot;
-mount /dev/sda1 /mnt/boot;
+mount /dev/sda3 /mnt
+mkdir /mnt/boot
+mount /dev/sda1 /mnt/boot
 ```
 
 ## 安裝
 
 一般來說我們都是使用 mirrorlist 來取得我們的 kernel 包，那麼你也可以選擇使用 Install Scripts 來安裝若是要使用 scripts 來安裝的話請參考此網址：https://github.com/danny8376/arch_install_script
-若是想要使用 mirrirlist 的話便可以繼續閱讀本文
+若是想要使用 mirrorlist 的話便可以繼續閱讀本文
 
 ### 設定 pacman 的 mirrorlist
 
@@ -104,7 +125,9 @@ pacman -Sy reflector
 reflector --verbose --latest 100 --sort rate --country 'Taiwan' --save /etc/pacman.d/mirrorlist
 ```
 
-### 安裝 base 和 base-devel packages
+### 安裝 base 和 base-devel group packages 
+
+如果想要更小的系統你可能不需要```base-devel```
 
 ```shell
 pacstrap /mnt base base-devel
@@ -112,7 +135,7 @@ pacstrap /mnt base base-devel
 
 ### 建立 fstab
 
-接下來我們要生成一個 fstab 文件，其中-U 代表透過 UUID 來分類定義那麼這個檔案提供了檔案系統的資訊，他定義了儲存設備和磁區如何初始化和如何聯接至整個系統
+接下來我們要生成一個 fstab 文件，其中 -U 代表透過 UUID 來定義，就算 device nodes 的標籤改變了也能順利使用，他定義了各個分區如何掛載於系統
 
 ```shell
 genfstab -U /mnt >> /mnt/etc/fstab
@@ -132,14 +155,22 @@ arch-chroot /mnt
 ln -sf /usr/share/zoneinfo/Asia/Taipei /etc/localtime
 ```
 
-### Step 10 設定語言環境
+### 設定語言環境
+
+生成```zh_TW.UTF-8```語系
 
 ```shell
-echo "en_US.UTF-8 UTF-8" > /etc/locale.gen
 echo "zh_TW.UTF-8 UTF-8" >> /etc/locale.gen
 locale-gen
-echo "LANG=en_US.UTF-8" > /etc/locale.conf
 ```
+
+設定預設為```zh_TW.UTF-8```
+
+```shell
+echo "LANG=zh_TW.UTF-8" > /etc/locale.conf
+```
+
+在tty底下無法直接顯示中文，使用```zh_TW.UTF-8```會出現一堆方塊，如果常直接在 tty 下做事可以用 ```export LC_ALL="C"```暫時修改，也可以只在 xinitrc 設定為```zh_TW.UTF-8```
 
 ### 設定電腦名稱
 
@@ -148,8 +179,7 @@ echo "<your-pc-name>" > /etc/hostname
 ```
 
 ```shell
-pacman -Sy vim
-vim /etc/hosts
+vi /etc/hosts
 ```
 
 在 /etc/hosts 中加入最後一行
@@ -162,6 +192,8 @@ vim /etc/hosts
 
 ### 建立開機映像檔
 
+如果你有修改 mkinitcpio.conf 才需要手動執行，沒有就直接跳過
+
 [mkinitcpio 介紹](<https://wiki.archlinux.org/index.php/Mkinitcpio_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)>)
 
 ```shell
@@ -169,6 +201,8 @@ mkinitcpio -p linux
 ```
 
 ### 設定 root 密碼
+
+在後面加入一般user之後可以透過```passwd -l root```防止使用root登入，但那會造成無法進入 emergency shell ，先修改密碼就好
 
 ```shell
 passwd
@@ -180,25 +214,33 @@ passwd
 pacman -Sy grub os-prober efibootmgr
 ```
 
-os-prober 可以用以偵測其他系統的存在，並在之後加入 grub 選單中。
-
-```shell
-os-prober
-```
+os-prober 可以用以偵測其他系統的存在，並在之後加入 grub 選單中，在 grub-mkconfig 內會自動執行
 
 ```shell
 grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=grub
 grub-mkconfig -o /boot/grub/grub.cfg
 ```
 
-### 安裝必要網路工具
+如果之後開機沒有載入grub而是載入了其他系統的bootloader，先檢查/boot/EFI/Boot/Bootx64.efi是否與/boot/grub/grubx64.efi相同，注意在FAT系列格式下大小寫不拘
+
+### 更新 repo 資料和套件
+
+就算是最新的 ISO 也有能資料不是最新的
 
 ```shell
-pacman -S net-tools;
-pacman -S wireless_tools;
-pacman -S dhclient;
-pacman -S wpa_supplicant;
+pacman -Syu
 ```
+
+### 安裝選用網路工具
+
+```shell
+pacman -S net-tools wireless_tools wpa_supplicant dialog
+```
+
+其中 wireless_tools wpa_supplicant dialog 只有要用 wifi 才需要， dialog 被 netctl 的 wifi-menu 功能需要
+net-tools 提供了 ifconfig route 等指令，如果你會用新的 ip 指令就不需要
+
+如果連上網路後沒有得到 ip ，執行 ```systemctl enable dhcpcd.service``` 以及 ```systemctl start dhcpcd.service``` 確保 dhcpcd 有在運行
 
 ### 建立新使用者
 
@@ -211,7 +253,7 @@ pacman -S sudo
 設定 sudo 群組
 
 ```shell
-vim /etc/sudoers
+vi /etc/sudoers
 ```
 
 找到該行(大約在第 82 行)，並刪除前方的 # 號
@@ -223,15 +265,9 @@ vim /etc/sudoers
 建立新使用者，並加入 sudo 群組
 
 ```shell
-useradd -m -u   <your-user-name>
+useradd -m -u <your-user-name>
 passwd <your-user-name>
 usermod <your-user-name> -G wheel
-```
-
-### 啟動必要開機模塊
-
-```shell
-systemctl enable dhcpd.service
 ```
 
 ### 重新啟動進入新系統
@@ -242,14 +278,14 @@ umount -R /mnt
 reboot
 ```
 
-進入新系統後的網路設定請參考 Step 1
+進入新系統後的網路設定請參考上方
 
 **(建議) 手動設定 DNS**
 
 因筆者曾被預設的 DNS 雷過，建議手動設定
 
 ```shell
-vim /etc/resolv.conf
+vi /etc/resolv.conf
 ```
 
 將所有設定前方加上 # 作註解添加以下 DNS (最少 1 種，看個人選擇)
@@ -258,6 +294,10 @@ vim /etc/resolv.conf
 * nameserver 168.95.1.1 #中華電信
 * nameserver 8.8.8.8 #Google
 * nameserver 8.8.4.4 #Google
+
+除此之外，也把上述加入 /etc/resolv.conf.head ，才會被 dhcpcd 採用
+
+如果有程式沒有在查詢失敗時常是下一個 server ，加上 ```options rotate```可能會有幫助
 
 ## 初次進入系統
 
@@ -277,7 +317,7 @@ vim /etc/resolv.conf
 sudo pacman -S intel-ucode
 ```
 
-/usr/bin/grub-mkconfig 可以自动处理微指令更新.用戶在安装完 intel-ucode 后，运行下面命令就可以重新生成配置文件启用微指令更新。
+/usr/bin/grub-mkconfig 可以自動處理載入 microcode 需要的參數，在安装完 intel-ucode 後，可以手動呼叫一次確保有被使用
 
 ```shell
 sudo grub-mkconfig -o /boot/grub/grub.cfg
@@ -294,26 +334,30 @@ sudo grub-mkconfig -o /boot/grub/grub.cfg
 目前較新型的晶片都可以被 arch 官方提供的開源驅動兼容因此我們只需要安裝
 
 ```shell
-sudo pacman -S nvidia-lts
+sudo pacman -S nvidia
 ```
+
+或者是 nvidia-lts
 
 然後我們可以透過其提供的 nvidia-settings 圖形界面程式來調整設定。
 
 #### AMD
 
-因為筆者目前沒有 AMD 的顯示卡因此請直接參參閱 https://wiki.archlinux.org/index.php/AMD_Catalyst_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)
+因為筆者們目前沒有 AMD 的顯示卡因此請直接參參閱 https://wiki.archlinux.org/index.php/AMD_Catalyst_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)
 
 ### 安裝桌面環境
+
+如果需要桌面環境，但不知道想用哪個可以試試 Gnome
 
 #### Gnome
 
 安裝 gnome 和 gnome-extra packages
 
 ```shell
-sudo pacman -Sy gnome gnome-extra
+sudo pacman -S gnome gnome-extra
 ```
 
-使用 systemd 開機啟動 gnome 及 networkmanager (gnome 使用的網路管理工具)模塊
+使用 systemd 開機啟動 gdm (gnome 預設的desktop manager)及 networkmanager (gnome 使用的網路管理工具)模塊
 
 ```shell
 sudo systemctl enable NetworkManager
@@ -334,9 +378,17 @@ Arch 使用者軟體倉庫 (AUR) 是由社群推動的使用者軟體庫。它�
 
 #### aurman
 
-基於 pyrhon 的 aur helper
+基於 python 的 aur helper
+
+```
+git clone https://aur.archlinux.org/aurman.git
+cd aurman
+makepkg -si
+```
 
 #### yaourt
+
+被標示為 inactive ，不建議使用
 
 ```shell
 sudo vim /etc/pacman.conf
@@ -371,21 +423,19 @@ makepkg -si
 安裝 fcitx
 
 ```shell
-sudo pacman -S  fcitx-im;
-sudo pacman -S  fcitx-chewing;
-sudo pacman -S  fcitx-configtool;
+sudo pacman -S fcitx-im fcitx-chewing fcitx-configtool
 ```
 
 ```shell
-sudo vim /etc/environment
+sudo vi /etc/environment
 ```
 
 在最後方添加以下三行
 
 ```shell
-export GTK_IM_MODULE=fcitx
-export QT_IM_MODULE=fcitx
-export XMODIFIERS="@im=fcitx"
+GTK_IM_MODULE=fcitx
+QT_IM_MODULE=fcitx
+XMODIFIERS="@im=fcitx"
 ```
 
 開啟 Fcitx Configuration 圖形界面新增 input method
@@ -394,24 +444,24 @@ export XMODIFIERS="@im=fcitx"
 ## 安裝字型
 
 ```shell
-sudo pacman -S noto-fonts;
-sudo pacman -S noto-fonts-cjk;
-sudo pacman -S ttf-roboto;
-sudo pacman -S ttf-roboto-mono;
+sudo pacman -S noto-fonts noto-fonts-cjk ttf-roboto ttf-roboto-mono
 ```
 
-ttf-noto 支援所有 Unicode 的語言與字元
-noto-fonts-cjk 為 Google 提供的免費字型(Chinese Japanese Korean)
+noto-fonts 支援大多數 Unicode 的字元
+noto-fonts-cjk 為 Google 提供的免費字型的中日韓子集(Chinese Japanese Korean)，建議至少也要安裝這個
 ttf-robot 也是 Google 提供的很潮的字型，適合用來設計 UI
 
-安裝過程電腦可能會好像當機、沒有反應，純屬正常現象，字型安裝完成就會恢復。
+安裝過程圖形介面可能會好像當機、沒有反應，純屬正常現象，字型安裝完成就會恢復。
 
 ### NTFS 檔案系統讀寫支援
 
-Linux kernel 不支援對 NTFS 檔案系統的讀取，如果額外的資料硬碟、其他硬碟是 NTFS 檔案系統的話，想要寫入就必須安裝額外的 [NTFS-3G](https://wiki.archlinux.org/index.php/NTFS-3G) Package
+如果需要對 NTFS 有更好的支援，ntfs-3g 提供了以 FUSE 實做的驅動，以及對 NTFS 進行各種操作的指令
+實際上如果只需要存取 NTFS 可以嘗試只用位於 linux kernel 內的驅動
+參見[NTFS-3G](https://wiki.archlinux.org/index.php/NTFS-3G) Package
+以及[Linux kernel source](https://github.com/torvalds/linux/blob/master/fs/ntfs/Kconfig)
 
 ```shell
-yaourt -S ntfs-3g
+pacman -S ntfs-3g
 ```
 
 ### 桌面美化工程
@@ -423,12 +473,10 @@ yaourt -S ntfs-3g
 Arch 自己的字體渲染實在不能看，在這方面 Ubuntu 做的比較好，那我們直接拿來用
 
 ```shell
-yaourt -S freetype2-ubuntu;
-yaourt -S fontconfig-ubuntu;
-yaourt -S cairo-ubuntu;
+aurman -S freetype2-ubuntu fontconfig-ubuntu cairo-ubuntu
 ```
 
-接下來我們可以安裝 theme 系統，主流的有：
+接下來我們可以安裝 theme，主流的有：
 
 ##### Arc
 
@@ -439,7 +487,7 @@ sudo pacman -S arc-gtk-theme;
 ##### Numix
 
 ```shell
-yaourt -S numix-theme;
+sudo pacman -S numix-theme;
 ```
 
 #### 接下來是 icon 系統
@@ -447,19 +495,19 @@ yaourt -S numix-theme;
 ##### Arc-icon
 
 ```shell
-sudo pacman -S arc-icon-theme ;
+sudo pacman -S arc-icon-theme 
 ```
 
 ##### Numix-icon
 
 ```shell
-yaourt -S numix-circle-icon-theme-git;
+yaourt -S numix-circle-icon-theme-git
 ```
 
 ##### Vivacious Colors icon
 
 ```shell
-yaourt -S vivacious-colors-icon-theme;
+yaourt -S vivacious-colors-icon-theme
 ```
 
 其他的可以去 gtk 的網站找來玩玩看：
