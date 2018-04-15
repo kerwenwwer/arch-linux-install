@@ -9,8 +9,7 @@
 
 ## 安裝
 
-一但你準備好了開機隨身碟，也在 UEFI settings 中使用 UEFI 模式(如果支援建議使用)，並且選擇以 usb 開機後，一般來說你可以毫無意外得進入 Arch ISO 的 shell 畫面中，也就是一個用來安裝 Arch 的 live 系統，會進入到一個有 zsh 的 tty ，我們可以直接在裡頭進行安裝工作。
-如果沒有辦法進入，可能需要停用 secure boot。
+一但你準備好了開機隨身碟，也在 UEFI settings 中使用 UEFI 模式(如果支援建議使用)，並且選擇以 usb 開機後，一般來說你可以毫無意外得進入 Arch ISO 的 shell 畫面中，也就是一個用來安裝 Arch 的 live 系統，會進入到一個有 zsh 的 tty ，我們可以直接在裡頭進行安裝工作。如果沒有辦法進入，可能需要停用 secure boot。
 
 以下安裝過程皆假設使用 UEFI
 
@@ -46,7 +45,7 @@ wpa_supplicant -B -i <interface> -c /etc/wpa_supplicant/wpa_supplicant.conf
 dhclient <interface>
 ```
 
-另一個好用的 wifi 連線方式是 ```wifi-menu``` 指令
+另一個好用的 wifi 連線方式是 `wifi-menu` 指令
 
 如果 dhcpcd 有在背景執行，就不用執行 dhclient ，啟用方式如下
 
@@ -72,13 +71,13 @@ fdisk -l
 
 其中常見 block devices 的命名規則如下
 
-SATA 或 USB: ```sd<x><y>``` ，其中 x 為英文字母，表示第 x 顆硬碟， y 為數字，表示硬碟上的第 y 個分區
+SATA 或 USB: `sd<x><y>` ，其中 x 為英文字母，表示第 x 顆硬碟， y 為數字，表示硬碟上的第 y 個分區
 
-IDE 介面: ```hd<x><y>``` ，其中 x 為英文字母，表示第 x 顆硬碟， y 為數字，表示硬碟上的第 y 個分區
- 
-NVMe 介面: ```nvme<x>n<y>p<z>``` ，其中 x, y, z 為數字， ```<x>n<y>``` 表示硬碟， ```p<z>``` 表示分區
- 
-MMC: ```mmcblk<x>p<y>``` ，其中 x, y 為數字， x 表示碟， ```p<y>``` 表示分區
+IDE 介面: `hd<x><y>` ，其中 x 為英文字母，表示第 x 顆硬碟， y 為數字，表示硬碟上的第 y 個分區
+
+NVMe 介面: `nvme<x>n<y>p<z>` ，其中 x, y, z 為數字， `<x>n<y>` 表示硬碟， `p<z>` 表示分區
+
+MMC: `mmcblk<x>p<y>` ，其中 x, y 為數字， x 表示碟， `p<y>` 表示分區
 
 在了解以上規則後我們就可以來分割磁區，這裡以最常見的第一顆 SATA 介面硬碟分區名稱 /dev/sda<y> 來做講解，並假設硬碟是空的
 
@@ -87,8 +86,8 @@ cfdisk /dev/sda
 ```
 
 * /dev/sda1: /boot
-  **空間至少 512MB，類型為 EFI System** (若有其他系統的EFI分區可以直接沿用，且不須格式化)
-  <br />
+   **空間至少 512MB，類型為 EFI System** (若有其他系統的 EFI 分區可以直接沿用，且不須格式化)
+   <br />
 
 * /dev/sda2: Swap
   **自訂，作者使用 8G，類型為 Linux Swap**
@@ -118,7 +117,7 @@ mount /dev/sda1 /mnt/boot
 
 ## 安裝
 
-一般來說我們都是使用 mirrorlist 來取得我們的 kernel 包，那麼你也可以選擇使用 Install Scripts 來安裝若是要使用 scripts 來安裝的話請參考此網址：https://github.com/danny8376/arch_install_script
+一般來說我們都是使用 mirrorlist 來取得我們的 kernel 包，那麼你也可以選擇使用 Install Scripts 來安裝若是要使用 scripts 來安裝的話請參考此網址：https://github.com/m85091081/arch_install_script
 若是想要使用 mirrorlist 的話便可以繼續閱讀本文
 
 ### 設定 pacman 的 mirrorlist
@@ -130,9 +129,9 @@ pacman -Sy reflector
 reflector --verbose --latest 100 --sort rate --country 'Taiwan' --save /etc/pacman.d/mirrorlist
 ```
 
-### 安裝 base 和 base-devel group packages 
+### 安裝 base 和 base-devel group packages
 
-如果想要更小的系統你可能不需要```base-devel```
+如果想要更小的系統你可能不需要`base-devel`
 
 ```shell
 pacstrap /mnt base base-devel
@@ -162,20 +161,20 @@ ln -sf /usr/share/zoneinfo/Asia/Taipei /etc/localtime
 
 ### 設定語言環境
 
-生成```zh_TW.UTF-8```語系
+生成`zh_TW.UTF-8`語系
 
 ```shell
 echo "zh_TW.UTF-8 UTF-8" >> /etc/locale.gen
 locale-gen
 ```
 
-設定預設為```zh_TW.UTF-8```
+設定預設為`zh_TW.UTF-8`
 
 ```shell
 echo "LANG=zh_TW.UTF-8" > /etc/locale.conf
 ```
 
-在tty底下無法直接顯示中文，使用```zh_TW.UTF-8```會出現一堆方塊，如果常直接在 tty 下做事可以用 ```export LC_ALL="C"```暫時修改，也可以只在 xinitrc 設定為```zh_TW.UTF-8```
+在 tty 底下無法直接顯示中文，使用`zh_TW.UTF-8`會出現一堆方塊，如果常直接在 tty 下做事可以用 `export LC_ALL="C"`暫時修改，也可以只在 xinitrc 設定為`zh_TW.UTF-8`
 
 ### 設定電腦名稱
 
@@ -207,7 +206,7 @@ mkinitcpio -p linux
 
 ### 設定 root 密碼
 
-在後面加入一般user之後可以透過```passwd -l root```防止使用root登入，但那會造成無法進入 emergency shell ，先修改密碼就好
+在後面加入一般 user 之後可以透過`passwd -l root`防止使用 root 登入，但那會造成無法進入 emergency shell ，先修改密碼就好
 
 ```shell
 passwd
@@ -226,7 +225,7 @@ grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=grub
 grub-mkconfig -o /boot/grub/grub.cfg
 ```
 
-如果之後開機沒有載入grub而是載入了其他系統的bootloader，先檢查/boot/EFI/Boot/Bootx64.efi是否與/boot/grub/grubx64.efi相同，注意在FAT系列格式下大小寫不拘
+如果之後開機沒有載入 grub 而是載入了其他系統的 bootloader，先檢查/boot/EFI/Boot/Bootx64.efi 是否與/boot/grub/grubx64.efi 相同，注意在 FAT 系列格式下大小寫不拘
 
 ### 更新 repo 資料和套件
 
@@ -246,7 +245,7 @@ pacman -S net-tools wireless_tools wpa_supplicant dialog
 
 net-tools 提供了 ifconfig route 等指令，如果你會用新的 ip 指令就不需要
 
-如果連上網路後沒有得到 ip ，執行 ```systemctl enable dhcpcd.service``` 以及 ```systemctl start dhcpcd.service``` 確保 dhcpcd 有在運行
+如果連上網路後沒有得到 ip ，執行 `systemctl enable dhcpcd.service` 以及 `systemctl start dhcpcd.service` 確保 dhcpcd 有在運行
 
 ### 建立新使用者
 
@@ -303,7 +302,7 @@ vi /etc/resolv.conf
 
 除此之外，也把上述加入 /etc/resolv.conf.head ，才會被 dhcpcd 採用
 
-如果有程式沒有在查詢失敗時常是下一個 server ，加上 ```options rotate```可能會有幫助
+如果有程式沒有在查詢失敗時常是下一個 server ，加上 `options rotate`可能會有幫助
 
 ## 初次進入系統
 
@@ -363,7 +362,7 @@ sudo pacman -S nvidia
 sudo pacman -S gnome gnome-extra
 ```
 
-使用 systemd 開機啟動 gdm (gnome 預設的desktop manager)及 networkmanager (gnome 使用的網路管理工具)模塊
+使用 systemd 開機啟動 gdm (gnome 預設的 desktop manager)及 networkmanager (gnome 使用的網路管理工具)模塊
 
 ```shell
 sudo systemctl enable NetworkManager
@@ -508,7 +507,7 @@ sudo pacman -S numix-theme;
 ##### Arc-icon
 
 ```shell
-sudo pacman -S arc-icon-theme 
+sudo pacman -S arc-icon-theme
 ```
 
 ##### Numix-icon
