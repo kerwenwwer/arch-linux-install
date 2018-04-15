@@ -71,8 +71,11 @@ fdisk -l
 其中常見 block devices 的命名規則如下
 
 SATA 或 USB: sd<x><y> ，其中 x 為英文字母，表示第 x 顆硬碟， y 為數字，表示硬碟上的第 y 個分區
+
 IDE 介面: hd<x><y> ，其中 x 為英文字母，表示第 x 顆硬碟， y 為數字，表示硬碟上的第 y 個分區
+ 
 NVMe 介面: nvme<x>n<y>p<z> ，其中 x, y, z 為數字， <x>n<y> 表示硬碟， p<z> 表示分區
+ 
 MMC: mmcblk<x>p<y> ，其中 x, y 為數字， <x> 表示碟， p<y> 表示分區
 
 在了解以上規則後我們就可以來分割磁區，這裡以最常見的第一顆 SATA 介面硬碟分區名稱 /dev/sda<y> 來做講解，並假設硬碟是空的
@@ -238,6 +241,7 @@ pacman -S net-tools wireless_tools wpa_supplicant dialog
 ```
 
 其中 wireless_tools wpa_supplicant dialog 只有要用 wifi 才需要， dialog 被 netctl 的 wifi-menu 功能需要
+
 net-tools 提供了 ifconfig route 等指令，如果你會用新的 ip 指令就不需要
 
 如果連上網路後沒有得到 ip ，執行 ```systemctl enable dhcpcd.service``` 以及 ```systemctl start dhcpcd.service``` 確保 dhcpcd 有在運行
@@ -373,7 +377,9 @@ reboot
 ### 安裝 aur helper
 
 Arch 使用者軟體倉庫 (AUR) 是由社群推動的使用者軟體庫。它包含了軟體包描述單 (PKGBUILD)，可以用 makepkg 從原始碼編譯軟體包，並透過 Pacman 安裝。 透過 AUR 可以在社群間分享、組織新進軟體包，熱門的軟體包有機會被收錄進 community 軟體庫。這份文件將解釋如何存取、使用 AUR。(本段來自 Arch Wiki)
-那麼，如果我們想要使用 aur 上的資源，我們需要確認我們已經被妥一個擁有 [makepkg](https://wiki.archlinux.org/index.php/Makepkg)指令的環境。然後我們還需要使用 aur helper 來幫我們編譯 aur 上的內容。以下推薦幾個 aur helper
+
+如果我們想要使用 aur 上的資源，我們需要確認我們已經備妥一個擁有 [makepkg](https://wiki.archlinux.org/index.php/Makepkg)指令的環境。然後我們可以使用 aur helper 來幫我們編譯 aur 上的內容。以下推薦幾個 aur helper
+
 其他請參閱[arch aur](<https://wiki.archlinux.org/index.php/Arch_User_Repository_(%E6%AD%A3%E9%AB%94%E4%B8%AD%E6%96%87)>) 以及[aur helper](https://wiki.archlinux.org/index.php/AUR_helpers)頁面。
 
 #### aurman
@@ -439,6 +445,7 @@ XMODIFIERS="@im=fcitx"
 ```
 
 開啟 Fcitx Configuration 圖形界面新增 input method
+
 找到 Chewing 並新增
 
 ## 安裝字型
@@ -448,7 +455,9 @@ sudo pacman -S noto-fonts noto-fonts-cjk ttf-roboto ttf-roboto-mono
 ```
 
 noto-fonts 支援大多數 Unicode 的字元
+
 noto-fonts-cjk 為 Google 提供的免費字型的中日韓子集(Chinese Japanese Korean)，建議至少也要安裝這個
+
 ttf-robot 也是 Google 提供的很潮的字型，適合用來設計 UI
 
 安裝過程圖形介面可能會好像當機、沒有反應，純屬正常現象，字型安裝完成就會恢復。
@@ -456,8 +465,10 @@ ttf-robot 也是 Google 提供的很潮的字型，適合用來設計 UI
 ### NTFS 檔案系統讀寫支援
 
 如果需要對 NTFS 有更好的支援，ntfs-3g 提供了以 FUSE 實做的驅動，以及對 NTFS 進行各種操作的指令
+
 實際上如果只需要存取 NTFS 可以嘗試只用位於 linux kernel 內的驅動
-參見[NTFS-3G](https://wiki.archlinux.org/index.php/NTFS-3G) Package
+
+參見[NTFS-3G](https://wiki.archlinux.org/index.php/NTFS-3G)
 以及[Linux kernel source](https://github.com/torvalds/linux/blob/master/fs/ntfs/Kconfig)
 
 ```shell
@@ -510,7 +521,7 @@ yaourt -S numix-circle-icon-theme-git
 yaourt -S vivacious-colors-icon-theme
 ```
 
-其他的可以去 gtk 的網站找來玩玩看：
+其他的可以去 gnome-look 網站找來玩玩看：
 https://www.gnome-look.org/browse/cat/135/
 
 ## Enjoy your new system
