@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="16"
+   height="16"
+   version="1.1"
+   id="svg4"
+   sodipodi:docname="preferences-system-symbolic.svg"
+   inkscape:version="0.92.2 (5c3e80d, 2017-08-06)">
+  <metadata
+     id="metadata10">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs8" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1366"
+     inkscape:window-height="740"
+     id="namedview6"
+     showgrid="true"
+     inkscape:zoom="20.85965"
+     inkscape:cx="2.7735613"
+     inkscape:cy="8.5456674"
+     inkscape:window-x="0"
+     inkscape:window-y="28"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg4"
+     inkscape:snap-bbox="true"
+     inkscape:bbox-nodes="true"
+     inkscape:snap-nodes="false">
+    <inkscape:grid
+       type="xygrid"
+       id="grid823" />
+  </sodipodi:namedview>
+  <path
+     inkscape:connector-curvature="0"
+     d="m 8.000001,0.8073905 c -0.226723,0 -0.452943,0.0116107 -0.6743119,0.0320587 L 6.9082573,2.9908252 C 6.5645923,3.066143 6.2269585,3.1715562 5.9128448,3.3119261 L 4.3394497,1.8027518 C 3.9401241,2.0391951 3.5924923,2.3309808 3.247707,2.6376142 L 4.1788999,4.5963298 C 3.9503583,4.8521728 3.7429727,5.1332105 3.5688075,5.4311922 L 1.4174318,5.1422013 C 1.2348204,5.5622219 1.1002143,6.0015907 1,6.4587151 L 2.8944956,7.486238 c -0.017571,0.1727163 -0.032059,0.336411 -0.032059,0.5137615 0,0.1773504 0.014594,0.3410451 0.032059,0.5137614 L 1,9.5412843 c 0.1001835,0.4571242 0.2348204,0.8964937 0.4174318,1.3165137 l 2.1513757,-0.288991 c 0.1741652,0.297982 0.3815508,0.57902 0.6100924,0.834863 L 3.247707,13.362385 c 0.3447853,0.306634 0.6924171,0.598419 1.0917427,0.834863 l 1.5733951,-1.509175 c 0.3141137,0.140371 0.6517475,0.245742 0.9954125,0.321102 l 0.4174318,2.151375 c 0.2213689,0.02055 0.4475889,0.03206 0.6743119,0.03206 0.2267229,0 0.452942,-0.01161 0.6743119,-0.03206 l 0.4174308,-2.151375 c 0.343665,-0.07532 0.6812987,-0.180731 0.9954113,-0.321102 l 1.573395,1.509175 c 0.399327,-0.236445 0.746958,-0.528229 1.091743,-0.834864 l -0.931192,-1.958715 c 0.228542,-0.255843 0.435926,-0.53688 0.610091,-0.834863 l 2.151376,0.288991 C 14.76518,10.437778 14.899786,9.9984085 15,9.5412843 L 13.105504,8.5137609 c 0.01757,-0.1727163 0.03206,-0.336411 0.03206,-0.5137614 0,-0.1773505 -0.01459,-0.3410452 -0.03206,-0.5137615 L 15,6.4587151 C 14.899817,6.0015907 14.76518,5.5622219 14.582568,5.1422013 L 12.431192,5.4311922 C 12.257027,5.1332105 12.049643,4.8521728 11.821101,4.5963298 L 12.752293,2.6376142 C 12.407508,2.3309808 12.059877,2.0391951 11.66055,1.8027518 L 10.087155,3.3119261 C 9.7730424,3.1715562 9.4354087,3.0661837 9.0917437,2.9908252 L 8.6743129,0.8394492 C 8.452943,0.8188988 8.2267239,0.8073905 8.000001,0.8073905 Z m 0,4.1100916 c 1.7024506,0 3.082568,1.3801174 3.082568,3.0825687 0,1.7024509 -1.3801174,3.0825692 -3.082568,3.0825692 -1.7024517,0 -3.0825697,-1.3801183 -3.0825697,-3.0825692 0,-1.7024513 1.380118,-3.0825687 3.0825697,-3.0825687 z"
+     id="path10065"
+     sodipodi:nodetypes="sccccccccccsccccccccccsccccccccccsccccccccccssssss"
+     style="color:#000000;display:inline;overflow:visible;visibility:visible;fill:#5c616c;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1.02752292;marker:none;enable-background:accumulate" />
+</svg>
