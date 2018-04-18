@@ -1,0 +1,60 @@
+"vimrc conf
+"using vim-autoformat powerline 
+let g:ycm_server_python_interpreter = '/usr/bin/python2'
+let g:ycm_global_ycm_extra_conf = '/usr/share/vim/vimfiles/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py'
+
+
+"Powerline Setting
+python3 from powerline.vim import setup as powerline_setup
+python3 powerline_setup()
+python3 del powerline_setup
+set laststatus=2 " Always display the statusline in all windows
+set showtabline=2 " Always display the tabline, even if there is only one tab
+set noshowmode " Hide the default mode text (e.g. -- INSERT -- below the statusline)
+set t_Co=256
+
+
+execute pathogen#infect()
+syntax on
+filetype plugin indent on
+
+execute pathogen#infect('stuff/{}', '~/src/vim/bundle/{}')
+
+syntax on
+" tab宽度和缩进同样设置为4
+set tabstop=4
+set softtabstop=4
+set shiftwidth=4
+
+set nocompatible
+
+" 你在此设置运行时路径
+set rtp+=~/.vim/bundle/Vundle.vim
+
+"下為插件安裝位置
+call vundle#begin()
+
+Plugin 'gmarik/Vundle.vim'
+Plugin 'Chiel92/vim-autoformat'
+Plugin 'airblade/vim-gitgutter'
+Plugin 'scrooloose/nerdtree'
+Plugin 'Xuyuanp/nerdtree-git-plugin'
+Plugin 'Valloric/YouCompleteMe'
+call vundle#end()
+
+
+filetype plugin indent on
+
+" NERDTree
+autocmd StdinReadPre * let s:std_in=1
+autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+
+" Go to definition else declaration
+nnoremap <leader>jd :YcmCompleter GoToDefinitionElseDeclaration<CR>
+" 主动调用补全
+let g:ycm_key_invoke_completion = '<C-a>'
+
+"F3自动格式化代码
+noremap <F3> :Autoformat<CR>
+let g:autoformat_verbosemode=1
