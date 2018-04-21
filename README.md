@@ -395,7 +395,7 @@ makepkg -si
 
 #### yaourt
 
-基於basic，被標示為 inactive ，不建議使用
+基於Bash，被標示為 inactive ，不建議使用
 
 ```shell
 sudo vim /etc/pacman.conf
