@@ -2,16 +2,7 @@
 "using vim-autoformat powerline 
 let g:ycm_server_python_interpreter = '/usr/bin/python2'
 let g:ycm_global_ycm_extra_conf = '/usr/share/vim/vimfiles/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py'
-
-
-"Powerline Setting
-"python3 from powerline.vim import setup as powerline_setup
-"python3 powerline_setup()
-"python3 del powerline_setup
-"set laststatus=2 " Always display the statusline in all windows
-"set showtabline=2 " Always display the tabline, even if there is only one tab
-"set noshowmode " Hide the default mode text (e.g. -- INSERT -- below the statusline)
-"set t_Co=256
+let g:clang_use_library = 1
 
 " set status line
 set laststatus=2
@@ -25,6 +16,7 @@ let g:airline#extensions#tabline#left_sep = ' '
 let g:airline#extensions#tabline#left_alt_sep = '|'
 " show buffer number
 let g:airline#extensions#tabline#buffer_nr_show = 1
+let g:airline_theme='one'
 let g:NERDTreeShowIgnoredStatus = 1
 
 "base
@@ -36,14 +28,14 @@ execute pathogen#infect('stuff/{}', '~/src/vim/bundle/{}')
 
 syntax on
 
-" tab宽度和缩进同样设置为4
+" tab寬度＝4
 set tabstop=4
 set softtabstop=4
 set shiftwidth=4
 
 set nocompatible
 
-" 你在此设置运行时路径
+" 路進檔位置
 set rtp+=~/.vim/bundle/Vundle.vim
 
 "下為插件安裝位置
@@ -54,6 +46,7 @@ Plugin 'Chiel92/vim-autoformat'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'scrooloose/nerdtree'
 Plugin 'Xuyuanp/nerdtree-git-plugin'
+Plugin 'morhetz/gruvbox'
 Plugin 'Valloric/YouCompleteMe'
 call vundle#end()
 
@@ -64,21 +57,22 @@ filetype plugin indent on
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
-" 关闭NERDTree快捷键 
+" 關閉NERDTree快捷键 
 map <leader>t :NERDTreeToggle<CR> 
-" 显示行号 
+" 顯示行號
 let NERDTreeShowLineNumbers=1 
 let NERDTreeAutoCenter=1 
-" 是否显示隐藏文件 
+" 是否顯示隐藏文件 
 let NERDTreeShowHidden=1 
-" 设置宽度 
-let NERDTreeWinSize=40 
-" 在终端启动vim时，共享NERDTree 
+" 設置宽度 
+let NERDTreeWinSize=50
+" 在终端启動vim时，共享NERDTree 
 let g:nerdtree_tabs_open_on_console_startup=1 
-" 忽略一下文件的显示 
+" 忽略一下文件的顯示 
 let NERDTreeIgnore=['\.pyc','\~$','\.swp'] 
-" 显示书签列表 
+" 顯示書籤
 let NERDTreeShowBookmarks=1
+"字元定義
 let g:NERDTreeIndicatorMapCustom = {
     \ "Modified"  : "✹",
     \ "Staged"    : "✚",
@@ -91,24 +85,17 @@ let g:NERDTreeIndicatorMapCustom = {
     \ 'Ignored'   : '☒',
     \ "Unknown"   : "?"
     \ }
-
-" Go to definition else declaration
-nnoremap <leader>jd :YcmCompleter GoToDefinitionElseDeclaration<CR>
-" 主动调用补全
-let g:ycm_key_invoke_completion = '<C-a>'
-
-" solarized
-syntax enable
-set background=dark
-colorscheme solarized
-if has('gui_running')
-    set background=light
-else
-    set background=dark
-endif
-set t_Co=16
+"顏色顯示
+colorscheme gruvbox
 let g:solarized_termcolors=256
-colorscheme solarized
+set t_Cp =256
+set background=dark    " Setting dark mode
+
+"自動補全顯示
+let g:ycm_global_ycm_extra_conf = '~/.ycm_extra_conf.py'
+let g:ycm_confirm_extra_conf = 0 
+
+"let g:spacevim_statusline_separator = 'arrow'
 
 "F3自动格式化代码
 noremap <F3> :Autoformat<CR>
