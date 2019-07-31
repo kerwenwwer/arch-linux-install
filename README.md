@@ -1,6 +1,8 @@
 # Arch Linux 安裝教學
 ![archlinux install](https://img.shields.io/badge/Arch%20install%20-Shell%20Script-yellow)
+
 ![last](https://img.shields.io/github/last-commit/kerwenwwer/arch-linux-install)
+
 ## 說明
 
 [參考自 Arch Wiki](https://wiki.archlinux.org/index.php/installation_guide)
