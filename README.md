@@ -1,7 +1,7 @@
 # Arch Linux 安裝教學
 
 ![docs](https://img.shields.io/readthedocs/pip.svg)
-
+![last](https://img.shields.io/github/last-commit/kerwenwwer/arch-linux-install)
 ## 說明
 
 [參考自 Arch Wiki](https://wiki.archlinux.org/index.php/installation_guide)
