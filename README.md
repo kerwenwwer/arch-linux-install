@@ -116,8 +116,7 @@ mount /dev/sda1 /mnt/boot
 
 ## 安裝
 
-一般來說我們都是使用 mirrorlist 來取得我們的 kernel 包，那麼你也可以選擇使用 Install Scripts 來安裝若是要使用 scripts 來安裝的話請參考此網址：https://github.com/m85091081/arch_install_script
-若是想要使用 mirrorlist 的話便可以繼續閱讀本文
+一般來說我們都是使用 mirrorlist 來取得我們的 kernel 包，那麼你也可以選擇使用 Install Scripts 來安裝若是要使用 scripts 來安裝的話可以使用```arch-install.sh``` 這個檔案，若是想要使用 mirrorlist 的話便可以繼續閱讀本文
 
 ### 設定 pacman 的 mirrorlist
 
