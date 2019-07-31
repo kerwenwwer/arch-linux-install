@@ -6,7 +6,7 @@
 [參考自 Arch Wiki](https://wiki.archlinux.org/index.php/installation_guide)
 文章貢獻感謝原作者 Cheng-Yi Hong 以及 Arch Linux Taiwan 社群人員對本文之貢獻以及轉發
 
-## 安裝
+## 一、安裝
 
 一但你準備好了開機隨身碟，也在 UEFI settings 中使用 UEFI 模式(如果支援建議使用)，並且選擇以 usb 開機後，一般來說你可以毫無意外得進入 Arch ISO 的 shell 畫面中，也就是一個用來安裝 Arch 的 live 系統，會進入到一個有 zsh 的 tty ，我們可以直接在裡頭進行安裝工作。如果沒有辦法進入，可能需要停用 secure boot。
 
@@ -302,7 +302,10 @@ vi /etc/resolv.conf
 
 如果有程式沒有在查詢失敗時常是下一個 server ，加上 `options rotate`可能會有幫助
 
-## 初次進入系統
+---
+##### 到此基本上完成了基礎得安裝，以下將會開始一些調整作業
+---
+## 二、初次進入系統
 
 ### 1. 安裝 CPU 微代碼(Microcode)
 
@@ -447,7 +450,7 @@ XMODIFIERS="@im=fcitx"
 
 找到 Chewing 並新增
 
-P.S IBus的部分請參閱[IBus Arch Wiki](https://wiki.archlinux.org/index.php/IBus)
+##### P.S IBus的部分請參閱[IBus Arch Wiki](https://wiki.archlinux.org/index.php/IBus)
 
 ## 7. 安裝字型
 
@@ -465,7 +468,7 @@ ttf-robot 也是 Google 提供的很潮的字型，適合用來設計 UI
 
 如果還想知道更多請看 [Cjk font](https://wiki.archlinux.org/index.php/Fonts_(%E6%AD%A3%E9%AB%94%E4%B8%AD%E6%96%87))
 
-### NTFS 檔案系統讀寫支援
+### 8. NTFS 檔案系統讀寫支援
 
 如果需要對 NTFS 有更好的支援，ntfs-3g 提供了以 FUSE 實做的驅動，以及對 NTFS 進行各種操作的指令
 
@@ -478,7 +481,7 @@ ttf-robot 也是 Google 提供的很潮的字型，適合用來設計 UI
 pacman -S ntfs-3g
 ```
 
-### 桌面美化工程
+### 9. 桌面美化工程
 
 如果你已經可以完整的使用你的系統後，你可能覺的自己的桌面不太好看，那麼我們來將我們的桌面美化一下吧！！
 
@@ -504,7 +507,7 @@ sudo pacman -S arc-gtk-theme;
 sudo pacman -S numix-theme;
 ```
 
-#### 接下來是 icon 系統
+#### Icon
 
 ##### Arc-icon
 
@@ -530,3 +533,37 @@ https://www.gnome-look.org/browse/cat/135/
 ## Enjoy your new system
 
 享受你的新系統，盡情客製化它吧！
+
+## Pacman 使用教學
+
+接下來來點常用的pacman 指令教學
+
+搜尋package
+```bash
+pacman -Ss package_name
+```
+
+安裝package
+```bash
+pacman -S package_name
+```
+刪除package
+```bash
+pacman -R package_name
+```
+安裝本地package
+```bash
+pacman -U loacl_package
+```
+
+系統內安裝軟體包的詳細資料
+```bash
+pacman -Qi package_name
+```
+傳入兩個 ``-i ``旗標，會同時顯示備份檔案清單與它們的修改狀態
+```bash
+ pacman -Qii package_name
+```
+
+剩下的請參考[Pacman](https://wiki.archlinux.org/index.php/Pacman_(%E6%AD%A3%E9%AB%94%E4%B8%AD%E6%96%87))
+
