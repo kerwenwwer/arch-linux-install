@@ -100,7 +100,7 @@ cfdisk /dev/sda
 
 通常我們都會在系統上加上 Swap（至換）分區。當然這個不是必須的，如果你覺得你的 RAM 大小足夠，可能覺得不需要這個分區也是可以的。順帶一提，當系統建立完成後想要新增 Swap 分區，或是基於檔案的 swap 也都是可行的。
 
-### 4. 格式化磁區
+### 格式化磁區
 
 ```shell
 mkfs -t vfat /dev/sda1
@@ -108,7 +108,7 @@ mkswap /dev/sda2
 mkfs -t ext4 /dev/sda3
 ```
 
-### 5. 掛載磁區
+### 掛載磁區
 
 ```shell
 mount /dev/sda3 /mnt
@@ -116,11 +116,11 @@ mkdir /mnt/boot
 mount /dev/sda1 /mnt/boot
 ```
 
-## 6. 安裝
+## 4. 安裝
 
 一般來說我們都是使用 mirrorlist 來取得我們的 kernel 包，那麼你也可以選擇使用 Install Scripts 來安裝若是要使用 scripts 來安裝的話可以使用```arch-install.sh``` 這個檔案，若是想要使用 mirrorlist 的話便可以繼續閱讀本文
 
-### 7. 設定 pacman 的 mirrorlist
+### 5. 設定 pacman 的 mirrorlist
 
 重新排序 pacman 的鏡像站順序，可以提高下載安裝的速度。
 
@@ -129,7 +129,7 @@ pacman -Sy reflector
 reflector --verbose --latest 100 --sort rate --country 'Taiwan' --save /etc/pacman.d/mirrorlist
 ```
 
-### 8. 安裝 base 和 base-devel group packages
+### 6. 安裝 base 和 base-devel group packages
 
 如果想要更小的系統你可能不需要`base-devel`
 
@@ -137,7 +137,7 @@ reflector --verbose --latest 100 --sort rate --country 'Taiwan' --save /etc/pacm
 pacstrap /mnt base base-devel
 ```
 
-### 9. 建立 fstab
+### 7. 建立 fstab
 
 接下來我們要生成一個 fstab 文件，其中 -U 代表透過 UUID 來定義，就算 device nodes 的標籤改變了也能順利使用，他定義了各個分區如何掛載於系統
 
@@ -145,7 +145,7 @@ pacstrap /mnt base base-devel
 genfstab -U /mnt >> /mnt/etc/fstab
 ```
 
-### 10. chroot 至新系統
+### 8. chroot 至新系統
 
 chroot 是更改系統根目錄的位置
 
@@ -153,13 +153,13 @@ chroot 是更改系統根目錄的位置
 arch-chroot /mnt
 ```
 
-### 11. 設定時區
+### 9. 設定時區
 
 ```shell
 ln -sf /usr/share/zoneinfo/Asia/Taipei /etc/localtime
 ```
 
-### 12. 設定語言環境
+### 10. 設定語言環境
 
 生成`zh_TW.UTF-8`語系
 
@@ -176,7 +176,7 @@ echo "LANG=zh_TW.UTF-8" > /etc/locale.conf
 
 在 tty 底下無法直接顯示中文，使用`zh_TW.UTF-8`會出現一堆方塊，如果常直接在 tty 下做事可以用 `export LC_ALL="C"`暫時修改，也可以只在 xinitrc 設定為`zh_TW.UTF-8`
 
-### 13. 設定電腦名稱
+### 11. 設定電腦名稱
 
 ```shell
 echo "<your-pc-name>" > /etc/hostname
@@ -194,7 +194,7 @@ vi /etc/hosts
 127.0.0.1  <your-pc-name>.localdomain  <your-pc-name>
 ```
 
-### 14. 建立開機映像檔
+### 12. 建立開機映像檔
 
 如果你有修改 mkinitcpio.conf 才需要手動執行，沒有就直接跳過
 
@@ -204,7 +204,7 @@ vi /etc/hosts
 mkinitcpio -p linux
 ```
 
-### 15. 設定 root 密碼
+### 13. 設定 root 密碼
 
 在後面加入一般 user 之後可以透過`passwd -l root`防止使用 root 登入，但那會造成無法進入 emergency shell ，先修改密碼就好
 
@@ -212,7 +212,7 @@ mkinitcpio -p linux
 passwd
 ```
 
-### 16. 安裝 grub 啟動載入程式
+### 14. 安裝 grub 啟動載入程式
 
 ```shell
 pacman -Sy grub os-prober efibootmgr
@@ -227,7 +227,7 @@ grub-mkconfig -o /boot/grub/grub.cfg
 
 如果之後開機沒有載入 grub 而是載入了其他系統的 bootloader，先檢查/boot/EFI/Boot/Bootx64.efi 是否與/boot/grub/grubx64.efi 相同，注意在 FAT 系列格式下大小寫不拘
 
-### 17. 更新 repo 資料和套件
+### 15. 更新 repo 資料和套件
 
 就算是最新的 ISO 也有能資料不是最新的
 
@@ -235,7 +235,7 @@ grub-mkconfig -o /boot/grub/grub.cfg
 pacman -Syu
 ```
 
-### 18. 安裝選用網路工具
+### 16. 安裝選用網路工具
 
 ```shell
 pacman -S net-tools wireless_tools wpa_supplicant dialog
@@ -247,7 +247,7 @@ net-tools 提供了 ifconfig route 等指令，如果你會用新的 ip 指令�
 
 如果連上網路後沒有得到 ip ，執行 `systemctl enable dhcpcd.service` 以及 `systemctl start dhcpcd.service` 確保 dhcpcd 有在運行
 
-### 19. 建立新使用者
+### 17. 建立新使用者
 
 安裝 sudo
 
@@ -275,7 +275,7 @@ passwd <your-user-name>
 usermod <your-user-name> -G wheel
 ```
 
-### 20. 重新啟動進入新系統
+### 18. 重新啟動進入新系統
 
 ```shell
 exit
