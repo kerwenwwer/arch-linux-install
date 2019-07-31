@@ -12,7 +12,7 @@
 
 以下安裝過程皆假設使用 UEFI
 
-### 驗證起動模式
+### 1. 驗證起動模式
 
 如果你已經啟用 UEFI 模式，Arch ISO 就會被經由 UEFI 啟動，在 UEFI 模式下，會存在目錄 /sys/firmware/efi/efivars ，我們如果想確保目前是以 UEFI 進入系統，便可以列出 efivars 目錄
 
@@ -20,7 +20,7 @@
 ls /sys/firmware/efi/efivars
 ```
 
-### 設定網路連線
+### 2. 設定網路連線
 
 如果能 ping 到 google.com 在絕大多數情況下就成功了
 
@@ -52,7 +52,7 @@ dhclient <interface>
 systemctl start dhcpcd.service
 ```
 
-### 分割磁區
+### 3. 分割磁區
 
 在我們開始分割你的除存區以前我們要先卻認他的分區代號以及它是否被正確讀到，那麼我們可以運行行以下幾個指令
 
@@ -98,7 +98,7 @@ cfdisk /dev/sda
 
 通常我們都會在系統上加上 Swap（至換）分區。當然這個不是必須的，如果你覺得你的 RAM 大小足夠，可能覺得不需要這個分區也是可以的。順帶一提，當系統建立完成後想要新增 Swap 分區，或是基於檔案的 swap 也都是可行的。
 
-### 格式化磁區
+### 4. 格式化磁區
 
 ```shell
 mkfs -t vfat /dev/sda1
@@ -106,7 +106,7 @@ mkswap /dev/sda2
 mkfs -t ext4 /dev/sda3
 ```
 
-### 掛載磁區
+### 5. 掛載磁區
 
 ```shell
 mount /dev/sda3 /mnt
@@ -114,11 +114,11 @@ mkdir /mnt/boot
 mount /dev/sda1 /mnt/boot
 ```
 
-## 安裝
+## 6. 安裝
 
 一般來說我們都是使用 mirrorlist 來取得我們的 kernel 包，那麼你也可以選擇使用 Install Scripts 來安裝若是要使用 scripts 來安裝的話可以使用```arch-install.sh``` 這個檔案，若是想要使用 mirrorlist 的話便可以繼續閱讀本文
 
-### 設定 pacman 的 mirrorlist
+### 7. 設定 pacman 的 mirrorlist
 
 重新排序 pacman 的鏡像站順序，可以提高下載安裝的速度。
 
@@ -127,7 +127,7 @@ pacman -Sy reflector
 reflector --verbose --latest 100 --sort rate --country 'Taiwan' --save /etc/pacman.d/mirrorlist
 ```
 
-### 安裝 base 和 base-devel group packages
+### 8. 安裝 base 和 base-devel group packages
 
 如果想要更小的系統你可能不需要`base-devel`
 
@@ -135,7 +135,7 @@ reflector --verbose --latest 100 --sort rate --country 'Taiwan' --save /etc/pacm
 pacstrap /mnt base base-devel
 ```
 
-### 建立 fstab
+### 9. 建立 fstab
 
 接下來我們要生成一個 fstab 文件，其中 -U 代表透過 UUID 來定義，就算 device nodes 的標籤改變了也能順利使用，他定義了各個分區如何掛載於系統
 
@@ -143,7 +143,7 @@ pacstrap /mnt base base-devel
 genfstab -U /mnt >> /mnt/etc/fstab
 ```
 
-### chroot 至新系統
+### 10. chroot 至新系統
 
 chroot 是更改系統根目錄的位置
 
@@ -151,13 +151,13 @@ chroot 是更改系統根目錄的位置
 arch-chroot /mnt
 ```
 
-### 設定時區
+### 11. 設定時區
 
 ```shell
 ln -sf /usr/share/zoneinfo/Asia/Taipei /etc/localtime
 ```
 
-### 設定語言環境
+### 12. 設定語言環境
 
 生成`zh_TW.UTF-8`語系
 
@@ -174,7 +174,7 @@ echo "LANG=zh_TW.UTF-8" > /etc/locale.conf
 
 在 tty 底下無法直接顯示中文，使用`zh_TW.UTF-8`會出現一堆方塊，如果常直接在 tty 下做事可以用 `export LC_ALL="C"`暫時修改，也可以只在 xinitrc 設定為`zh_TW.UTF-8`
 
-### 設定電腦名稱
+### 13. 設定電腦名稱
 
 ```shell
 echo "<your-pc-name>" > /etc/hostname
@@ -192,7 +192,7 @@ vi /etc/hosts
 127.0.0.1  <your-pc-name>.localdomain  <your-pc-name>
 ```
 
-### 建立開機映像檔
+### 14. 建立開機映像檔
 
 如果你有修改 mkinitcpio.conf 才需要手動執行，沒有就直接跳過
 
@@ -202,7 +202,7 @@ vi /etc/hosts
 mkinitcpio -p linux
 ```
 
-### 設定 root 密碼
+### 15. 設定 root 密碼
 
 在後面加入一般 user 之後可以透過`passwd -l root`防止使用 root 登入，但那會造成無法進入 emergency shell ，先修改密碼就好
 
@@ -210,7 +210,7 @@ mkinitcpio -p linux
 passwd
 ```
 
-### 安裝 grub 啟動載入程式
+### 16. 安裝 grub 啟動載入程式
 
 ```shell
 pacman -Sy grub os-prober efibootmgr
@@ -225,7 +225,7 @@ grub-mkconfig -o /boot/grub/grub.cfg
 
 如果之後開機沒有載入 grub 而是載入了其他系統的 bootloader，先檢查/boot/EFI/Boot/Bootx64.efi 是否與/boot/grub/grubx64.efi 相同，注意在 FAT 系列格式下大小寫不拘
 
-### 更新 repo 資料和套件
+### 17. 更新 repo 資料和套件
 
 就算是最新的 ISO 也有能資料不是最新的
 
@@ -233,7 +233,7 @@ grub-mkconfig -o /boot/grub/grub.cfg
 pacman -Syu
 ```
 
-### 安裝選用網路工具
+### 18. 安裝選用網路工具
 
 ```shell
 pacman -S net-tools wireless_tools wpa_supplicant dialog
@@ -245,7 +245,7 @@ net-tools 提供了 ifconfig route 等指令，如果你會用新的 ip 指令�
 
 如果連上網路後沒有得到 ip ，執行 `systemctl enable dhcpcd.service` 以及 `systemctl start dhcpcd.service` 確保 dhcpcd 有在運行
 
-### 建立新使用者
+### 19. 建立新使用者
 
 安裝 sudo
 
@@ -273,7 +273,7 @@ passwd <your-user-name>
 usermod <your-user-name> -G wheel
 ```
 
-### 重新啟動進入新系統
+### 20. 重新啟動進入新系統
 
 ```shell
 exit
@@ -304,7 +304,7 @@ vi /etc/resolv.conf
 
 ## 初次進入系統
 
-### 安裝 CPU 微代碼(Microcode)
+### 1. 安裝 CPU 微代碼(Microcode)
 
 詳細請參閱：[Microcode](<https://wiki.archlinux.org/index.php/Microcode_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)>)
 
@@ -326,7 +326,7 @@ sudo pacman -S intel-ucode
 sudo grub-mkconfig -o /boot/grub/grub.cfg
 ```
 
-### 安裝顯示晶片驅動
+### 2 安裝顯示晶片驅動
 
 如果你有顯示卡的話，那我們就要需要安裝顯示晶片驅動，當然這並非必要步驟。
 
@@ -348,7 +348,7 @@ sudo pacman -S nvidia
 
 因為筆者們目前沒有 AMD 的顯示卡因此請直接參參閱 https://wiki.archlinux.org/index.php/AMD_Catalyst_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)
 
-### 安裝桌面環境
+### 3. 安裝桌面環境 (選用)
 
 如果需要桌面環境，但不知道想用哪個可以試試 Gnome
 
@@ -367,13 +367,13 @@ sudo systemctl enable NetworkManager
 sudo systemctl enable gdm
 ```
 
-### 重新開機
+### 4. 重新開機
 
 ```shell
 reboot
 ```
 
-### 安裝 aur helper
+### 5. 安裝 aur helper (選用)
 
 Arch 使用者軟體倉庫 (AUR) 是由社群推動的使用者軟體庫。它包含了軟體包描述單 (PKGBUILD)，可以用 makepkg 從原始碼編譯軟體包，並透過 Pacman 安裝。 透過 AUR 可以在社群間分享、組織新進軟體包，熱門的軟體包有機會被收錄進 community 軟體庫。這份文件將解釋如何存取、使用 AUR。(本段來自 Arch Wiki)
 
@@ -423,7 +423,7 @@ cd ../yaourt
 makepkg -si
 ```
 
-### 安裝中文輸入法 (fcitx)
+### 6. 安裝中文輸入法 (fcitx)
 
 安裝 fcitx
 
@@ -447,7 +447,9 @@ XMODIFIERS="@im=fcitx"
 
 找到 Chewing 並新增
 
-## 安裝字型
+P.S IBus的部分請參閱[IBus Arch Wiki](https://wiki.archlinux.org/index.php/IBus)
+
+## 7. 安裝字型
 
 ```shell
 sudo pacman -S noto-fonts noto-fonts-cjk ttf-roboto ttf-roboto-mono
@@ -460,6 +462,8 @@ noto-fonts-cjk 為 Google 提供的免費字型的中日韓子集(Chinese Japane
 ttf-robot 也是 Google 提供的很潮的字型，適合用來設計 UI
 
 安裝過程圖形介面可能會好像當機、沒有反應，純屬正常現象，字型安裝完成就會恢復。
+
+如果還想知道更多請看 [Cjk font](https://wiki.archlinux.org/index.php/Fonts_(%E6%AD%A3%E9%AB%94%E4%B8%AD%E6%96%87))
 
 ### NTFS 檔案系統讀寫支援
 
