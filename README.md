@@ -15,9 +15,9 @@
 
 ### 1. 驗證起動模式
 
-如果你已經啟用 UEFI 模式，Arch ISO 就會被經由 UEFI 啟動，在 UEFI 模式下，會存在目錄 /sys/firmware/efi/efivars ，我們如果想確保目前是以 UEFI 進入系統，便可以列出 efivars 目錄
+如果你已經啟用 UEFI 模式，Arch ISO 就會被經由 UEFI 啟動，在 UEFI 模式下，會存在目錄 ```/sys/firmware/efi/efivars ```，我們如果想確保目前是以 UEFI 進入系統，便可以列出 efivars 目錄
 
-```shell
+```bash
 ls /sys/firmware/efi/efivars
 ```
 
@@ -97,7 +97,7 @@ cfdisk /dev/sda
   **自訂，作者使用全部剩餘空間，類型為 Linux filesystem**
   <br />
 
-通常我們都會在系統上加上 Swap（至換）分區。當然這個不是必須的，如果你覺得你的 RAM 大小足夠，可能覺得不需要這個分區也是可以的。順帶一提，當系統建立完成後想要新增 Swap 分區，或是基於檔案的 swap 也都是可行的。
+?> 通常我們都會在系統上加上 Swap（至換）分區。當然這個不是必須的，如果你覺得你的 RAM 大小足夠，可能覺得不需要這個分區也是可以的。順帶一提，當系統建立完成後想要新增 Swap 分區，或是基於檔案的 swap 也都是可行的。
 
 ### 格式化磁區
 
@@ -118,6 +118,8 @@ mount /dev/sda1 /mnt/boot
 ## 4. 安裝
 
 一般來說我們都是使用 mirrorlist 來取得我們的 kernel 包，那麼你也可以選擇使用 Install Scripts 來安裝若是要使用 scripts 來安裝的話可以使用```arch-install.sh``` 這個檔案，若是想要使用 mirrorlist 的話便可以繼續閱讀本文
+
+!> 注意，必須先分割完磁碟區才可以用script
 
 ### 5. 設定 pacman 的 mirrorlist
 
