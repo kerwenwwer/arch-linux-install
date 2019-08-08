@@ -1,0 +1,3 @@
+[submodule "arch-linux-install"]
+	path = arch-linux-install
+	url = https://github.com/kerwenwwer/arch-linux-install
