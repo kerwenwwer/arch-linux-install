@@ -1,4 +1,5 @@
 # Arch Linux 安裝教學
+
 ![archlinux install](https://img.shields.io/badge/Arch%20install%20-Shell%20Script-yellow)
 ![last](https://img.shields.io/github/last-commit/kerwenwwer/arch-linux-install)
 
@@ -115,11 +116,10 @@ mkdir /mnt/boot
 mount /dev/sda1 /mnt/boot
 ```
 
-## 4. 安裝
+### 4. 安裝
 
-一般來說我們都是使用 mirrorlist 來取得我們的 kernel 包，那麼你也可以選擇使用 Install Scripts 來安裝若是要使用 scripts 來安裝的話可以使用```arch-install.sh``` 這個檔案，若是想要使用 mirrorlist 的話便可以繼續閱讀本文
+一般來說我們都是使用 mirrorlist 來取得我們的 kernel 包，那麼你也可以選擇使用 Install Scripts 來安裝。
 
-!> 注意，必須先分割完磁碟區才可以用script
 
 ### 5. 設定 pacman 的 mirrorlist
 
@@ -340,8 +340,6 @@ sudo grub-mkconfig -o /boot/grub/grub.cfg
 
 #### Nvidia
 
-目前較新型的晶片都可以被 arch 官方提供的開源驅動兼容因此我們只需要安裝
-
 ```shell
 sudo pacman -S nvidia
 ```
@@ -455,7 +453,7 @@ XMODIFIERS="@im=fcitx"
 
 ##### P.S IBus的部分請參閱[IBus Arch Wiki](https://wiki.archlinux.org/index.php/IBus)
 
-## 7. 安裝字型
+### 7. 安裝字型
 
 ```shell
 sudo pacman -S noto-fonts noto-fonts-cjk ttf-roboto ttf-roboto-mono
@@ -570,3 +568,6 @@ pacman -Qi package_name
 
 剩下的請參考[Pacman](https://wiki.archlinux.org/index.php/Pacman_(%E6%AD%A3%E9%AB%94%E4%B8%AD%E6%96%87))
 
+* * *
+
+<meta content="Archlinux 安裝，安裝教學，arch ,archlinux" name="description">
