@@ -5,10 +5,7 @@ step1(){
     echo 'Configure mirrorlist ...'
     mv /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.bak
     echo 'Server = http://archlinux.cs.nctu.edu.tw/$repo/os/$arch' >> /etc/pacman.d/mirrorlist
-    echo 'Server = http://shadow.ind.ntou.edu.tw/archlinux/$repo/os/$arch' >> /etc/pacman.d/mirrorlist
-    echo 'Server = http://ftp.tku.edu.tw/Linux/ArchLinux/$repo/os/$arch' >> /etc/pacman.d/mirrorlist
-    echo 'Server = http://ftp.yzu.edu.tw/Linux/archlinux/$repo/os/$arch' >> /etc/pacman.d/mirrorlist
-
+    
     echo 'Install ArchLinux ...'
     pacstrap /mnt base base-devel
 
@@ -33,7 +30,7 @@ step2(){
     echo 'Server = http://repo.archlinux.fr/$arch' >> /etc/pacman.conf
     echo 'Install packages ...'
 
-    pacman -Sy  gedit vim net-tools wireless_tools dhclient wpa_supplicant  firefox grub os-prober efibootmgr
+    pacman -Sy  gedit vim net-tools wireless_tools dhclient wpa_supplicant grub os-prober efibootmgr
 
     echo 'Change system limit ...'
     echo '*               -       nofile          10000' >> /etc/security/limits.conf
