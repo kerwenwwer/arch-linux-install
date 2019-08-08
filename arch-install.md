@@ -3,7 +3,7 @@
 ![archlinux install](https://img.shields.io/badge/Arch%20install%20-Shell%20Script-yellow)
 ![last](https://img.shields.io/github/last-commit/kerwenwwer/arch-linux-install)
 
-### Mirror from [kerwenwwer/arch-linux-install](https://github.com/kerwenwwer/arch-linux-install)
+### Mirror from:  [kerwenwwer/arch-linux-install](https://github.com/kerwenwwer/arch-linux-install)
 
 ---
 
