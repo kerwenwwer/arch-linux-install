@@ -7,7 +7,7 @@ $ /bin/bash $(chmod +x arch-install.sh && ./arch-install.sh)
 
 Ｍarkdown website view: 
 
-https://kerwenwwer.github.io/document-blog/#/archlinux
+https://kerwenwwer.github.io/document-blog/#/arch-linux-install/arch-install
 
 
 
