@@ -9,9 +9,6 @@ $ /bin/bash $(chmod +x arch-install.sh && ./arch-install.sh)
 
 https://kerwenwwer.github.io/document-blog/#/arch-linux-install/arch-install
 
+An alternative version intended for experienced GNU/Linux users (in Chinese Traditional):
 
-
-Want to see more ? Please see:
-
-https://xdavidwu.parto.nctu.me/archlinux/arch-install/?fbclid=IwAR3qK2kv11hLNWzmeQgDc1_ZVf3q4_wnG9cbBEoIHVmagBXqszdzMqviGxM
-
+https://xdavidwu.eglo.ga/archlinux/arch-install/ which is a website version of https://github.com/xdavidwu/arch-linux-install
