@@ -11,4 +11,4 @@ https://kerwenwwer.github.io/document-blog/#/arch-linux-install/arch-install
 
 An alternative version intended for experienced GNU/Linux users (in Chinese Traditional):
 
-https://xdavidwu.eglo.ga/archlinux/arch-install/ which is a website version of https://github.com/xdavidwu/arch-linux-install
+https://xdavidwu.link/archlinux/arch-install/ which is a website version of https://github.com/xdavidwu/arch-linux-install
